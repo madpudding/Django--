@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+     {% load static %}
+    <!-- Bootstrap -->
+    <link href="{% static 'primary_crawler/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{% static 'primary_crawler/css/font-awesome.min.css' %}" rel="stylesheet">
+    <!-- Date Style -->
+    <link href="{% static 'primary_crawler/css/daterangepicker.css' %}" rel="stylesheet">
+    <!-- table Style -->
+    <link href="{% static 'primary_crawler/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'primary_crawler/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="{% static 'primary_crawler/css/custom.min.css' %}" rel="stylesheet">
+
+    <style>
+        .table-head tr {padding-right:17px;}
+        .table-body{width:100%; height:600px;overflow-y:scroll;}
+        .table-head table,.table-body table{width:100%;}
+        .table-body table tr:nth-child(2n+1){background-color:#f2f2f2;}
+    </style>
+</head>
+<body>
+
+<div style="width: 800px;">
+    <div class="table-head">
+    <table >
+        <colgroup>
+            <col style="width: 80px;" />
+            <col />
+        </colgroup>
+        <thead>
+             <tr class="headings">
+                <th class="column-title">&nbsp;&nbsp;网站名</th>
+                <th class="column-title">下载数据量</th>
+                <th class="column-title">解析数据量</th>
+                <th class="column-title">有效数据量</th>
+                <th class="column-title">下载成功率</th>
+                <th class="column-title">解析成功率</th>
+                <th class="column-title no-link last"><span class="nobr">数据有效率</span>
+                </th>
+              </tr>
+        </thead>
+    </table>
+    </div>
+    <div class="table-body">
+    <table >
+        <colgroup><col style="width: 80px;" /><col /></colgroup>
+        <tbody id="crawler-table">
+
+        </tbody>
+    </table>
+    </div>
+</div>
+<!-- jQuery -->
+    <script src="{% static 'primary_crawler/js/jquery.min.js' %}"></script>
+    <!-- Bootstrap -->
+    <script src="{% static 'primary_crawler/js/bootstrap.min.js' %}"></script>
+    <!-- Table -->
+    <script src="{% static 'primary_crawler/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'primary_crawler/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'primary_crawler/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'primary_crawler/js/dataTables.keyTable.min.js' %}"></script>
+	<!-- Echarts Theme Scripts -->
+    <script src="{% static 'primary_crawler/js/echarts.min.js' %}"></script>
+    <!-- 日历 Scripts -->
+    <script src="{% static 'primary_crawler/js/moment.min.js' %}"></script>
+    <script src="{% static 'primary_crawler/js/daterangepicker.js' %}"></script>
+    <!-- Index Scripts -->
+    <script src="{% static 'primary_crawler/js/index.js' %}"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="{% static 'primary_crawler/js/custom.min.js' %}"></script>
+</body>
+</html>

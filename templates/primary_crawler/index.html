@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,  maximum-scale=1, user-scalable=no">
+      {% load static %}
+	<link rel="icon" href="{% static 'primary_crawler/images/favicon.ico' %}" type="image/ico" />
+    <title>舆情监控系统</title>
+
+    <!-- Bootstrap -->
+    <link href="{% static 'primary_crawler/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{% static 'primary_crawler/css/font-awesome.min.css' %}" rel="stylesheet">
+    <!-- Button -->
+    <link href="{% static 'primary_crawler/css/button.css' %}" rel="stylesheet">
+    <!-- Date Style -->
+    <link href="{% static 'primary_crawler/css/daterangepicker.css' %}" rel="stylesheet">
+    <!-- table Style -->
+    <link href="{% static 'primary_crawler/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+{#    <link href="{% static 'primary_crawler/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">#}
+{#    <link href="{% static 'primary_crawler/css/scroller.bootstrap.min.css' %}" rel="stylesheet">#}
+    <!-- Custom Theme Style -->
+    <link href="{% static 'primary_crawler/css/custom.min.css' %}" rel="stylesheet">
+    <style>
+    .title-1 {
+        background-image: url("{% static 'primary_crawler/images/one.png' %}");
+        background-repeat:no-repeat;
+        background-size: 100% auto;
+        {#height: 190px;#}
+        -webkit-border-radius: 25px;
+        -moz-border-radius:25px ;
+        border-radius:25px ;
+    }
+    .icon-status{
+        color: white;
+        position: absolute;
+        margin-left: -20%;
+        margin-top: -4%;
+        width: 40%;
+        height: 80%;
+        z-index: 999;
+    }
+    .icon-stage{
+        color: white;
+        position: absolute;
+        margin-left: -20%;
+        margin-top: -4%;
+        width: 40%;
+        height: 80%;
+        z-index: 999;
+    }
+    .icon-nums{
+        color: white;
+        position: absolute;
+        margin-left: -20%;
+        margin-top: -4%;
+        width: 40%;
+        height: 80%;
+        z-index: 999;
+    }
+    .tile_stats_count{
+        {#text-align: center;#}
+    }
+
+    .panel-heading{
+        color: white;
+    }
+
+    .title-2 {
+        background-image: url("{% static 'primary_crawler/images/two.png' %}");
+        background-repeat:no-repeat;
+        background-size: 100% auto;
+        {#height: 190px;#}
+        -webkit-border-radius: 25px;
+        -moz-border-radius:25px ;
+        border-radius:25px ;
+    }
+    .title-3 {
+        background-image: url("{% static 'primary_crawler/images/three.png' %}");
+        background-repeat:no-repeat;
+        background-size: 100% auto;
+        {#height: 190px;#}
+        -webkit-border-radius: 25px;
+        -moz-border-radius:25px ;
+        border-radius:25px ;
+    }
+    {% comment %} echart 01-04 上下左右4个表 {% endcomment %}
+    #chart_plot_01{
+      height: 400px;
+      margin-bottom: 20px;
+    }
+    #chart_plot_03{
+        height: 600px;
+        margin-bottom: 20px;
+    }
+    #chart_plot_04{
+        height: 600px;
+        margin-bottom: 20px;
+    }
+    {% comment %}表格{% endcomment %}
+    #table_plot_01{
+        height: 650px;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+    .pie-col{
+        margin-top: 0.5%;
+    }
+    .line-col{
+        {#margin-top: 1%;#}
+        margin-bottom: 0.1%;
+    }
+    #choice-top{
+        margin-top: 5%;
+    }
+    .table-col{
+        margin-top: 0.5%;
+    }
+    {% comment %}时间环比按钮{% endcomment %}
+    #choice-time{
+        margin-top: 2.5%;
+    }
+    footer{
+       text-align: center;
+    }
+
+    </style>
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>舆情监控系统</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <img src="{% static 'primary_crawler/images/img.jpg' %}" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>欢迎您,</span>
+                <h2 id="user_name">John Doe</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-bar-chart-o"></i> 概览 <span class="fa fa-chevron-right"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="javascript:">概览 1</a></li>
+                      <li><a href="javascript:">概览 2</a></li>
+                      <li><a href="javascript:">概览 3</a></li>
+                    </ul>
+                  </li>
+
+                  <li><a><i class="fa fa-cog"></i> 设置 <span class="fa fa-chevron-right"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="javascript:">设置 1</a></li>
+                      <li><a href="javascript:">设置 2</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-user" aria-hidden="true"></i> 个人中心 <span class="fa fa-chevron-right"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="javascript:">个人中心</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:" class="user-profile"  aria-expanded="true">
+                    <img src="{% static 'primary_crawler/images/off.png' %}" alt="">关闭
+                  </a>
+                </li>
+                  <li class="">
+                  <a href="javascript:" class="user-profile"  aria-expanded="true" id="user_name_1">
+                    <img src="{% static 'primary_crawler/images/img.jpg' %}" alt="">John Doe
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <!-- top tiles -->
+          {% comment %}爬虫运行状态{% endcomment %}
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="x_panel title title-1 overflow_hidden" >
+                        <div class="panel-heading">
+                            <h2>爬虫是否运行</h2>
+                        </div>
+                        <div id="spider_status" >
+                            <div class="icon-status">
+                                <i class="fa fa-bar-chart fa-5x"></i>
+                            </div>
+                            <h1 id="spider_status_h1"></h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="x_panel title title-2 overflow_hidden" >
+                        <div class="panel-heading">
+
+                            <h2>爬虫目前运行阶段</h2>
+                        </div>
+                        <div  id="spider_stage" style="width: 100%;height:100%;">
+                            <div class="icon-stage">
+                                <i class="fa fa-cloud fa-5x"></i>
+                            </div>
+                            <h1 id="spider_stage_h1"></h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="x_panel title title-3 overflow_hidden" >
+                        <div class="panel-heading">
+                            <h2>爬虫今天运行的轮数</h2>
+                        </div>
+                        <div id="spider_nums" style="width: 100%;height:100%;">
+                            <div class="icon-nums">
+                                <i class="fa fa-clock-o fa-5x"></i>
+                            </div>
+                            <h1 id="spider_nums_h1"></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+          <div class="row tile_count">
+
+              <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+                  <span class="count_top" style="color: #1c466d;font-size: 20px;"><i class="fa fa-clock-o"></i> 解析总数</span>
+                  <div class="count black " id="parse-total"></div>
+                  <span class="count_bottom " id="parse_bottom"></span>
+              </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top" style="color: #1c466d;font-size: 20px;"><i class="fa fa-clock-o "></i> 解析成功率</span>
+              <div class="count black" id="parse-per"></div>
+                <span class="count_bottom " id="parse_per_bottom"></span>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top" style="color: #1c466d;font-size: 20px;"><i class="fa fa-arrow-down "></i> 下载总数</span>
+              <div class="count black" id="download-total"></div>
+                <span class="count_bottom " id="download_total_bottom"></span>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top" style="color: #1c466d;font-size: 20px;"><i class="fa fa-arrow-down x"></i> 下载成功率</span>
+              <div class="count black" id="download-per"></div>
+                <span class="count_bottom " id="download_per_bottom"></span>
+            </div>
+
+          </div>
+          <!-- /top tiles -->
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="dashboard_graph ">
+                <div class="row x_title">
+                  <div class="col-md-2 col-xs-12" >  {% comment %}style="width: 12.499999995%"{% endcomment %}
+                    <h3 style="color: #1c466d"><i class="fa fa-line-chart"></i>&nbsp;爬虫活动监控</h3>
+                  </div>
+                  <div class="col-md-2 line-col">
+                    <div id="report-range" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                      <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                      <span id="date-show"></span> <b class="caret"></b>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  <div id="chart_plot_01" class="demo-placeholder"></div>
+                </div>
+                </div>
+
+                <div class="clearfix"></div>
+              </div>
+            </div>
+
+          <br />
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="dashboard_graph_amount">
+
+                <div class="row x_title">
+                  <div class="col-md-2 col-xs-12" >  {% comment %}style="width: 12.499999995%"{% endcomment %}
+                    <h3 style="color: #1c466d"><i class="fa fa-pie-chart"></i> &nbsp;爬虫活动监控</h3>
+                  </div>
+                   <div class="col-md-2  pie-col">
+                    <div id="report-range-amount" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                      <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                      <span id="amount-date-show"></span> <b class="caret"></b>
+                    </div>
+                  </div>
+                  <div class="col-md-1 col-xs-12">
+                      <div id="choice-top" class="dropdown"> {% comment %}饼图与柱状图TOP榜{% endcomment %}
+                        <button class="btn btn-default btn-group btn-group-lg dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        选择TOP榜
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li><a id="ch-top5" >top 5</a></li>
+                        <li><a id="ch-top10">top 10</a></li>
+                        <li><a id="ch-top20">top 20</a></li>
+                        <li><a id="ch-top50" >top 50</a></li>
+                        <li><a id="ch-top100">top 100</a></li>
+                      </ul>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div id="chart_plot_03" class="demo-placeholder"></div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 ">
+                  <div id="chart_plot_04" class="demo-placeholder"></div>
+                </div>
+
+                </div>
+
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          <br/>
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="dashboard_graph_table">
+
+                <div class="row x_title">
+                  <div class="col-md-2" >  {% comment %}style="width: 12.499999995%"{% endcomment %}
+                      <h3 style="color: #1c466d"><i class="fa fa-list-alt"></i>&nbsp;爬虫活动监控</h3>
+                  </div>
+                 <div class="col-md-2 table-col">
+                    <div id="report-range-table" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                      <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                      <span id="amount-date-show"></span> <b class="caret"></b>
+                    </div>
+                  </div>
+                  <div class="col-md-2 col-xs-12">
+                      <div id="choice-time" class="dropdown"> {% comment %}饼图与柱状图TOP榜{% endcomment %}
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span  id="sort-menu">选择环比周期</span>
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu"  aria-labelledby="dropdownMenu1">
+                        <li><a id="ch-day" >以天对比</a></li>
+                        <li><a id="ch-week">以周对比</a></li>
+                        <li><a id="ch-month">以月对比</a></li>
+                      </ul>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="col-md-12 col-sm-12 col-xs-12 ">
+                  <div id="table_plot_01" class="table-responsive demo-placeholder">
+                      <table id="table"  class="table table-striped jambo_table bulk_action"
+                      data-pagination="true" data-side-pagination="client" data-page-size="10">
+                        <thead id="th-head">
+                          <tr class="headings">
+                            <th class="column-title">&nbsp;&nbsp;网站名
+                            </th>
+                            <th class="column-title">下载数据量
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0);" id="download-suc"><i class="success fa fa-long-arrow-up"></i>
+                                <i class="success fa fa-long-arrow-down"></i>
+                                </a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0);" id="download-suc-growth"> <i class="success fa fa-long-arrow-up"></i>
+                                    <i class="success fa fa-long-arrow-down"></i>
+                                </a>
+                            </th>
+                            <th class="column-title">解析数据量
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0);" id="parse-suc"><i class="success fa fa-long-arrow-up"></i>
+                                <i class="success fa fa-long-arrow-down"></i>
+                                </a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0);" id="parse-suc-growth"> <i class="success fa fa-long-arrow-up"></i>
+                                    <i class="success fa fa-long-arrow-down"></i>
+                                </a>
+                            </th>
+                            <th class="column-title">有效数据量
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0);" id="storage-suc"><i class="success fa fa-long-arrow-up"></i>
+                                <i class="success fa fa-long-arrow-down"></i>
+                                </a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0);" id="storage-suc-growth"> <i class="success fa fa-long-arrow-up"></i>
+                                    <i class="success fa fa-long-arrow-down"></i>
+                                </a>
+                            </th>
+                            <th class="column-title">下载成功率
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0);" id="download-per-per"><i class="success fa fa-long-arrow-up"></i>
+                                <i class="success fa fa-long-arrow-down"></i>
+                                </a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0);" id="download-per-growth"> <i class="success fa fa-long-arrow-up"></i>
+                                    <i class="success fa fa-long-arrow-down"></i>
+                                </a>
+                            </th>
+                            <th class="column-title">解析成功率
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0);" id="parse-per-per"><i class="success fa fa-long-arrow-up"></i>
+                                <i class="success fa fa-long-arrow-down"></i>
+                                </a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0);" id="parse-per-growth"> <i class="success fa fa-long-arrow-up"></i>
+                                    <i class="success fa fa-long-arrow-down"></i>
+                                </a>
+                            </th>
+                            <th class="column-title no-link last"><span class="nobr">数据有效率</span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0);" id="storage-per-per"><i class="success fa fa-long-arrow-up"></i>
+                                <i class="success fa fa-long-arrow-down"></i>
+                                </a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0);" id="storage-per-growth"> <i class="success fa fa-long-arrow-up"></i>
+                                    <i class="success fa fa-long-arrow-down"></i>
+                                </a>
+                            </th>
+                          </tr>
+                        </thead>
+
+                        <tbody id="crawler-table">
+
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+
+                </div>
+
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          <br/>
+
+          </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+            {% comment %}<button class="fo-btn btn-primary"> 转转</button>{% endcomment %}
+            <a href="https://colorlib.com">九章智云</a>@Copyright
+        </footer>
+        <!-- /footer content -->
+      </div>
+
+    <!-- jQuery -->
+    <script src="{% static 'primary_crawler/js/jquery.min.js' %}"></script>
+    <!-- Bootstrap -->
+    <script src="{% static 'primary_crawler/js/bootstrap.min.js' %}"></script>
+    <!-- Table -->
+    <script src="{% static 'primary_crawler/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'primary_crawler/js/dataTables.bootstrap.min.js' %}"></script>
+{#    <script src="{% static 'primary_crawler/js/dataTables.buttons.min.js' %}"></script>#}
+    <script src="{% static 'primary_crawler/js/dataTables.keyTable.min.js' %}"></script>
+{#    <script src="{% static 'primary_crawler/js/dataTables.fixedHeader.min.js' %}"></script>#}
+{#    <script src="{% static 'primary_crawler/js/dataTables.scroller.min.js' %}"></script>#}
+	<!-- Echarts Theme Scripts -->
+    <script src="{% static 'primary_crawler/js/echarts.min.js' %}"></script>
+    <script src="{% static 'primary_crawler/js/macarons.js' %}"></script>
+    <script src="{% static 'primary_crawler/js/shine.js' %}"></script>
+    <!-- 日历 Scripts -->
+    <script src="{% static 'primary_crawler/js/moment.min.js' %}"></script>
+    <script src="{% static 'primary_crawler/js/daterangepicker.js' %}"></script>
+    <!-- Index Scripts -->
+    <script src="{% static 'primary_crawler/js/index.js' %}"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="{% static 'primary_crawler/js/custom.min.js' %}"></script>
+
+    <script>
+
+        setTimeout(function () {
+            $(".dataTables_scrollBody").css("width","101.15%")
+        },2500);
+    </script>
+  </body>
+</html>
